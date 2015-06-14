@@ -1,0 +1,22 @@
+---
+- hosts: "{{ vagrant_hostname_main }}"
+  sudo: yes
+
+  tasks:
+  - name: apt-get update
+    apt: update_cache=true
+
+  - name: install basic packages and redis
+    apt: name={{ item }} state=present
+    with_items:
+      - python-dev
+      - python-setuptools
+      - python-pip
+      - git
+      - redis-server
+
+  # Skip venv.. because, reasons.
+  - name: install python client for redis
+    pip: name={{ item }} state=present
+    with_items:
+      - redis
